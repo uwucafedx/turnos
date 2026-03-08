@@ -6,7 +6,6 @@
     <title>Turnos - Cybele & Raffá</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-        /* --- ESTILO GENERAL --- */
         body {
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,17 +20,15 @@
         .logo-header { width: 100%; text-align: center; padding: 40px 0; background: rgba(0, 0, 0, 0.5); }
         .logo-header img { max-width: 500px; width: 85%; height: auto; filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6)); }
 
-        /* --- CONTENEDOR DE DOS COLUMNAS --- */
         .contenedor-principal {
             display: flex;
-            flex-wrap: wrap; /* Para que en el celular se ponga uno abajo del otro */
+            flex-wrap: wrap;
             gap: 20px;
             width: 95%;
             max-width: 1200px;
             margin: 20px auto 60px auto;
         }
 
-        /* Columna Izquierda (Calendario) */
         #columna-agenda {
             flex: 2;
             min-width: 350px;
@@ -42,7 +39,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Columna Derecha (Mapa y Galería) */
         #columna-derecha {
             flex: 1;
             min-width: 300px;
@@ -56,27 +52,24 @@
             padding: 20px;
             border-radius: 20px;
             border: 1px solid #C0C0C0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         h2, h3 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-
         #calendar { background: white; padding: 15px; border-radius: 10px; color: #333; }
 
-        /* --- ESTILOS DE BLOQUEO --- */
+        /* Estilos de bloqueo */
         .fc-v-event { background-color: #d32f2f !important; border: none !important; display: flex !important; align-items: center !important; justify-content: center !important; }
         .texto-bloqueo { color: white !important; font-weight: 800 !important; font-size: 11px !important; text-align: center; text-transform: uppercase; }
-        .fc-nonbusiness { background-color: rgba(180, 180, 180, 0.5) !important; display: flex !important; align-items: center !important; justify-content: center !important; position: relative; }
-        .fc-nonbusiness::after { content: "CERRADO"; color: #444; font-size: 10px; font-weight: bold; position: absolute; }
+        .fc-nonbusiness { background-color: rgba(180, 180, 180, 0.5) !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+        .fc-nonbusiness::after { content: "CERRADO"; color: #444; font-size: 10px; font-weight: bold; }
         .fc-day-sun { display: none !important; }
 
-        /* --- MAPA Y GALERÍA --- */
+        /* Mapa y Galería */
         .mapa-recuadro { width: 100%; height: 250px; border-radius: 15px; overflow: hidden; border: 1px solid #C0C0C0; }
         .galeria { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .galeria img { width: 100%; height: 110px; object-fit: cover; border-radius: 10px; border: 1px solid #C0C0C0; transition: 0.3s; cursor: pointer; }
-        .galeria img:hover { transform: scale(1.05); border-color: #fff; }
+        .galeria img { width: 100%; height: 110px; object-fit: cover; border-radius: 10px; border: 1px solid #C0C0C0; }
 
-        /* --- MODAL DE RESERVA --- */
+        /* Modal */
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
         .modal-content { background-color: #2b2b2b; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
         .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
@@ -92,20 +85,18 @@
     </header>
 
     <div class="contenedor-principal">
-        
         <div id="columna-agenda">
             <h2> AGENDÁ TU TURNO </h2>
             <div id="calendar"></div>
         </div>
 
         <div id="columna-derecha">
-            
             <div class="tarjeta-info">
                 <h3>UBICACIÓN</h3>
                 <div class="mapa-recuadro">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.551717838634!2d-68.8354!3d-32.859!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDUxJzMyLjQiUyA2OMKwNTAnMDcuNCJX!5e0!3m2!1ses!2sar!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.81591873132!2d-67.6896896!3d-34.9782559!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967ef012c05b7071%3A0x95f4ec3c7cba909b!2sPeluqueria%20y%20est%C3%A9tica%20Cybele%20Mendoza!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
-                <p style="text-align: center; font-size: 13px; margin-top: 10px; color: #aaa;">📍 Gral. Roca 817, Las Heras, Mendoza.</p>
+                <p style="text-align: center; font-size: 13px; margin-top: 10px; color: #aaa;">📍 Diagonal Carlos Pellegrini, Local 2, Alvear, Mendoza.</p>
             </div>
 
             <div class="tarjeta-info">
@@ -116,9 +107,7 @@
                     <img src="https://via.placeholder.com/200x200?text=Estética" alt="Trabajo 3">
                     <img src="https://via.placeholder.com/200x200?text=Estilo" alt="Trabajo 4">
                 </div>
-                <p style="text-align: center; font-size: 12px; margin-top: 15px; color: #aaa;">Seguinos en redes para ver más.</p>
             </div>
-
         </div>
     </div>
 
@@ -146,30 +135,23 @@
                 selectable: true,
                 hiddenDays: [0],
                 slotLabelFormat: { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' },
-                headerToolbar: { 
-                    left: 'prev,next today', 
-                    center: 'title', 
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay' 
-                },
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
                 
-                // --- CONEXIÓN AL EXCEL CON FILTRO ANTI-CACHÉ ---
                 events: function(fetchInfo, successCallback, failureCallback) {
-                    var scriptURL = 'https://script.google.com/macros/s/AKfycbxSzBoPxdYPQ6eiskuhra5upZ1W04cQ6rqIIVpDaVAR6P1VYJejkCOjXTdQbIBRBIzZ/exec';
+                    var scriptURL = 'https://script.google.com/macros/s/AKfycbzR8xqbJWfq1HV_CDlTHkgEQpgOFfaPwkR94FcJ7bzRFohTOp5UO_SAskQGlb48sMjq/exec';
                     fetch(scriptURL + '?t=' + new Date().getTime())
                         .then(response => response.json())
                         .then(data => {
-                            // Filtramos para que solo aparezcan turnos con cliente anotado
-                            let ocupados = data.filter(e => e.title && e.title.trim() !== "" && e.title !== "null");
-                            successCallback(ocupados);
+                            // Solo muestra turnos si el Script envió datos (y el Script solo envía si hay cliente)
+                            successCallback(data);
                         })
                         .catch(error => failureCallback(error));
                 },
                 
                 eventContent: function(arg) {
-                    return { html: '<div class="texto-bloqueo">NO DISPONIBLE</div>' };
+                    return { html: '<div class="texto-bloqueo">OCUPADO</div>' };
                 },
 
-                // HORARIOS DE DANA
                 businessHours: [
                     { daysOfWeek: [ 1, 2, 3, 4, 5 ], startTime: '14:00', endTime: '20:00' }, 
                     { daysOfWeek: [ 6 ], startTime: '09:00', endTime: '12:00' },
