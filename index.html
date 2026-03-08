@@ -17,8 +17,8 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        .logo-header { width: 100%; text-align: center; padding: 50px 0; background: rgba(0, 0, 0, 0.5); }
-        .logo-header img { max-width: 550px; width: 90%; height: auto; filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6)); }
+        .logo-header { width: 100%; text-align: center; padding: 40px 0; background: rgba(0, 0, 0, 0.5); }
+        .logo-header img { max-width: 500px; width: 85%; height: auto; filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6)); }
 
         #calendar-container {
             background-color: rgba(43, 43, 43, 0.95);
@@ -29,47 +29,36 @@
             margin: 20px 0 60px 0;
         }
 
-        h2 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; }
+        h2 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
         #calendar { background: white; padding: 15px; border-radius: 10px; color: #333; }
 
-        /* --- ESTILOS DE ESTADOS (LO QUE PEDISTE) --- */
-        
-        /* 1. Turnos que vienen del Excel */
-        .fc-event { 
-            background-color: #ff4d4d !important; 
-            border: none !important; 
-            cursor: not-allowed !important;
-        }
-        .texto-tomado { 
-            color: white; font-weight: bold; font-size: 10px; 
-            text-align: center; width: 100%; text-transform: uppercase;
-        }
+        /* --- ESTADOS: TOMADO Y CERRADO --- */
+        .fc-v-event { background-color: #ff4d4d !important; border: none !important; }
+        .texto-tomado { color: white; font-weight: bold; font-size: 10px; text-align: center; width: 100%; }
 
-        /* 2. Horarios Cerrados (Siesta y fuera de hora) */
         .fc-nonbusiness { 
             background-color: rgba(180, 180, 180, 0.4) !important; 
             display: flex !important; align-items: center !important; justify-content: center !important; 
         }
-        .fc-nonbusiness::before { 
-            content: "CERRADO"; color: #777; font-size: 10px; font-weight: bold; 
-        }
+        .fc-nonbusiness::before { content: "CERRADO"; color: #777; font-size: 10px; font-weight: bold; }
 
         .fc-day-sun { display: none !important; }
         .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
 
-        /* --- MODAL --- */
+        /* --- MODAL DE SELECCIÓN --- */
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
         .modal-content { background-color: #2b2b2b; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
-        .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-estetica { background-color: #e0e0e0; color: #333; }
         .btn-barberia { background-color: #333; color: #C0C0C0; border: 1px solid #C0C0C0; }
+        .btn-opcion:hover { transform: scale(1.03); }
         .btn-cancelar { background: none; color: #ff5555; cursor: pointer; border: none; text-decoration: underline; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <header class="logo-header">
-        <img src="logos.png" alt="Cybele Mendoza y Raffá Barbería">
+        <img src="logos.png" alt="Cybele & Raffá">
     </header>
 
     <div id="calendar-container">
@@ -96,27 +85,27 @@
                 locale: 'es',
                 allDaySlot: false,
                 slotMinTime: '08:00:00',
-                slotMaxTime: '20:00:00',
+                slotMaxTime: '22:00:00',
                 slotDuration: '00:30:00',
                 selectable: true,
-                hiddenDays: [0],
+                hiddenDays: [0], // Sin domingos
                 slotLabelFormat: { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' },
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'timeGridWeek,timeGridDay' },
                 
-                // CONEXIÓN AL EXCEL
+                // VINCULO AL EXCEL
                 events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec',
                 
-                // Forzar que el texto "TURNO TOMADO" aparezca en los bloques del Excel
                 eventContent: function(arg) {
                     let div = document.createElement('div');
                     div.innerHTML = '<div class="texto-tomado">TURNO TOMADO</div>';
                     return { domNodes: [div] };
                 },
 
-                // Definir qué horas están abiertas (Lo que no esté aquí saldrá como CERRADO)
+                // TUS HORARIOS EXACTOS
                 businessHours: [
-                    { daysOfWeek: [ 1, 2, 3, 4, 5, 6 ], startTime: '08:00', endTime: '12:00' },
-                    { daysOfWeek: [ 1, 2, 3, 4, 5, 6 ], startTime: '14:00', endTime: '20:00' }
+                    { daysOfWeek: [ 1, 2, 3, 4, 5 ], startTime: '14:00', endTime: '20:00' }, // Lun-Vie
+                    { daysOfWeek: [ 6 ], startTime: '09:00', endTime: '12:00' },             // Sab Mañana
+                    { daysOfWeek: [ 6 ], startTime: '14:00', endTime: '21:00' }              // Sab Tarde
                 ],
                 
                 selectConstraint: 'businessHours',
