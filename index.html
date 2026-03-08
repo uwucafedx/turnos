@@ -6,22 +6,20 @@
     <title>Turnos - Cybele & Raffá</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-        /* --- ESTILO GENERAL --- */
         body {
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-image: url('fondo.png');
             background-attachment: fixed;
-            background-size: auto;
-            background-repeat: repeat;
+            background-size: cover;
+            background-repeat: no-repeat;
             color: #ffffff;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        .logo-header { width: 100%; text-align: center; padding: 40px 0; background: rgba(0, 0, 0, 0.5); }
-        .logo-header img { max-width: 500px; width: 85%; height: auto; filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6)); }
+        .logo-header { width: 100%; text-align: center; padding: 40px 0; background: rgba(0, 0, 0, 0.6); }
+        .logo-header img { max-width: 450px; width: 80%; height: auto; filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.7)); }
 
-        /* --- CONTENEDOR DE DOS COLUMNAS --- */
         .contenedor-principal {
             display: flex;
             flex-wrap: wrap;
@@ -31,18 +29,16 @@
             margin: 20px auto 60px auto;
         }
 
-        /* Columna Izquierda (Calendario) */
         #columna-agenda {
             flex: 2;
             min-width: 350px;
-            background-color: rgba(43, 43, 43, 0.95);
-            padding: 20px;
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 25px;
             border-radius: 20px;
             border: 1px solid #C0C0C0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
-        /* Columna Derecha (Mapa) */
         #columna-derecha {
             flex: 1;
             min-width: 300px;
@@ -52,34 +48,31 @@
         }
 
         .tarjeta-info {
-            background-color: rgba(43, 43, 43, 0.95);
+            background-color: rgba(30, 30, 30, 0.9);
             padding: 20px;
             border-radius: 20px;
             border: 1px solid #C0C0C0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         h2, h3 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        #calendar { background: white; padding: 15px; border-radius: 12px; color: #333; }
 
-        #calendar { background: white; padding: 15px; border-radius: 10px; color: #333; }
-
-        /* --- ESTILOS DE BLOQUEO --- */
+        /* Estilos de turnos ocupados */
         .fc-v-event { background-color: #d32f2f !important; border: none !important; display: flex !important; align-items: center !important; justify-content: center !important; }
-        .texto-bloqueo { color: white !important; font-weight: 800 !important; font-size: 11px !important; text-align: center; text-transform: uppercase; }
-        .fc-nonbusiness { background-color: rgba(180, 180, 180, 0.5) !important; display: flex !important; align-items: center !important; justify-content: center !important; position: relative; }
-        .fc-nonbusiness::after { content: "CERRADO"; color: #444; font-size: 10px; font-weight: bold; position: absolute; }
+        .texto-bloqueo { color: white !important; font-weight: bold; font-size: 11px; text-transform: uppercase; }
+        .fc-nonbusiness { background-color: rgba(200, 200, 200, 0.3) !important; }
         .fc-day-sun { display: none !important; }
 
-        /* --- MAPA --- */
+        /* Mapa Recuadro */
         .mapa-recuadro { width: 100%; height: 400px; border-radius: 15px; overflow: hidden; border: 1px solid #C0C0C0; }
 
-        /* --- MODAL DE RESERVA --- */
-        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
-        .modal-content { background-color: #2b2b2b; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
-        .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-estetica { background-color: #e0e0e0; color: #333; }
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        .modal-content { background: #222; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 380px; }
+        .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-estetica { background-color: #f0f0f0; color: #222; }
         .btn-barberia { background-color: #333; color: #C0C0C0; border: 1px solid #C0C0C0; }
-        .btn-cancelar { background: none; color: #ff5555; cursor: pointer; border: none; text-decoration: underline; margin-top: 15px; }
+        .btn-cancelar { background: none; color: #ff4444; border: none; cursor: pointer; text-decoration: underline; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -96,15 +89,15 @@
 
         <div id="columna-derecha">
             <div class="tarjeta-info">
-                <h3>NUESTRA UBICACIÓN</h3>
+                <h3>UBICACIÓN</h3>
                 <div class="mapa-recuadro">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3238.2562477812547!2d-67.6953!3d-34.9758!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDU4JzMyLjkiUyA2N8KwNDEnNDMuMSJX!5e0!3m2!1ses-419!2sar!4v1700000000000!5m2!1ses-419!2sar" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3248.868770732439!2d-67.69343942422086!3d-34.97242137282121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967de340245479d1%3A0xbd729931420e064b!2sDiagonal%20Carlos%20Pellegrini%2C%20General%20Alvear%2C%20Mendoza!5e0!3m2!1ses-419!2sar!4v1709923000000!5m2!1ses-419!2sar" 
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
                     </iframe>
                 </div>
-                <p style="text-align: center; font-size: 13px; margin-top: 10px; color: #C0C0C0;">
-                    📍 Diag. Carlos Pellegrini y Centenario, Local 2, Alvear.
+                <p style="text-align: center; font-size: 13px; margin-top: 12px; color: #C0C0C0;">
+                    📍 Diagonal Carlos Pellegrini y Centenario, Local 2, Alvear.
                 </p>
             </div>
         </div>
@@ -112,15 +105,15 @@
 
     <div id="miModal" class="modal">
         <div class="modal-content">
-            <h3 id="fechaSeleccionada" style="color: #C0C0C0;">Elegí tu servicio</h3>
-            <button class="btn-opcion btn-estetica" onclick="enviarWhatsApp('estetica')">PELUQUERÍA Cybele</button>
-            <button class="btn-opcion btn-barberia" onclick="enviarWhatsApp('barberia')">BARBERÍA Raffá</button>
-            <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+            <h3 id="fechaSeleccionada">Seleccioná un servicio</h3>
+            <button class="btn-opcion btn-estetica" onclick="enviarWA('Peluquería Cybele')">PELUQUERÍA Cybele</button>
+            <button class="btn-opcion btn-barberia" onclick="enviarWA('Barbería Raffá')">BARBERÍA Raffá</button>
+            <button class="btn-cancelar" onclick="cerrar()">Cancelar</button>
         </div>
     </div>
 
     <script>
-        let datosReserva = { fecha: '', hora: '' };
+        let reserva = { f: '', h: '' };
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
@@ -130,63 +123,44 @@
                 allDaySlot: false,
                 slotMinTime: '08:00:00',
                 slotMaxTime: '21:00:00',
-                slotDuration: '00:30:00',
                 selectable: true,
-                hiddenDays: [0], // Oculta Domingo
-                slotLabelFormat: { hour: 'numeric', minute: '2-digit', hour12: true },
-                headerToolbar: { 
-                    left: 'prev,next today', 
-                    center: 'title', 
-                    right: 'dayGridMonth,timeGridWeek' 
-                },
+                hiddenDays: [0],
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
                 
-                // CONEXIÓN AL EXCEL (Script V7AVF)
-                events: function(fetchInfo, successCallback, failureCallback) {
-                    var scriptURL = 'https://script.google.com/macros/s/AKfycbwK0F4WuJBmhpUbKjylICgjblcOfc9mIEMaRrYG345MUMBBwAlkud9heXCBXx_V7AVF/exec';
+                events: function(info, success, failure) {
+                    var scriptURL = 'https://script.google.com/macros/s/AKfycby-Gd5UCg6tla7tzPiwUO8Yk9mIJeezKc5UN300fqP9_vFPx1QZqFS-a3GJSKA4lNbV/exec';
                     fetch(scriptURL + '?t=' + new Date().getTime())
-                        .then(response => response.json())
-                        .then(data => {
-                            successCallback(data);
-                        })
-                        .catch(error => failureCallback(error));
+                        .then(r => r.json())
+                        .then(d => success(d))
+                        .catch(e => failure(e));
                 },
                 
-                eventContent: function(arg) {
-                    return { html: '<div class="texto-bloqueo">OCUPADO</div>' };
-                },
+                eventContent: function() { return { html: '<div class="texto-bloqueo">OCUPADO</div>' }; },
 
-                // Horarios comerciales
                 businessHours: [
-                    { daysOfWeek: [ 1, 2, 3, 4, 5 ], startTime: '14:00', endTime: '20:00' }, 
-                    { daysOfWeek: [ 6 ], startTime: '09:00', endTime: '12:00' },
-                    { daysOfWeek: [ 6 ], startTime: '14:00', endTime: '21:00' }
+                    { daysOfWeek: [1,2,3,4,5], startTime: '14:00', endTime: '20:00' },
+                    { daysOfWeek: [6], startTime: '09:00', endTime: '12:00' },
+                    { daysOfWeek: [6], startTime: '14:00', endTime: '21:00' }
                 ],
                 
                 selectConstraint: 'businessHours',
 
-                select: function(info) {
-                    if (calendar.view.type === 'dayGridMonth') {
-                        calendar.changeView('timeGridDay', info.startStr);
-                    } else {
-                        datosReserva.fecha = info.startStr.split("T")[0];
-                        datosReserva.hora = info.start.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit', hour12: true});
-                        document.getElementById('fechaSeleccionada').innerText = "Turno: " + datosReserva.fecha + " a las " + datosReserva.hora;
-                        document.getElementById('miModal').style.display = "flex";
-                        calendar.unselect();
-                    }
+                select: function(i) {
+                    reserva.f = i.startStr.split("T")[0];
+                    reserva.h = i.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    document.getElementById('fechaSeleccionada').innerText = "Turno: " + reserva.f + " a las " + reserva.h;
+                    document.getElementById('miModal').style.display = "flex";
                 }
             });
             calendar.render();
         });
 
-        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
-
-        function enviarWhatsApp(tipo) {
-            let numero = (tipo === 'estetica') ? "5492625464538" : "5492625451485";
-            let servicio = (tipo === 'estetica') ? "PELUQUERÍA" : "BARBERÍA";
-            let mensaje = "Hola! Quiero reservar un turno de " + servicio + " para el día " + datosReserva.fecha + " a las " + datosReserva.hora;
-            window.open("https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje));
-            cerrarModal();
+        function cerrar() { document.getElementById('miModal').style.display = "none"; }
+        function enviarWA(tipo) {
+            let n = (tipo.includes('Cybele')) ? "5492625464538" : "5492625451485";
+            let m = "Hola! Quiero reservar un turno para " + tipo + " el día " + reserva.f + " a las " + reserva.h;
+            window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(m));
+            cerrar();
         }
     </script>
 </body>
