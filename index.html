@@ -21,7 +21,7 @@
         #calendar { background: white; padding: 10px; border-radius: 10px; color: #333; height: 700px; }
         .mapa-recuadro { width: 100%; height: 400px; border-radius: 10px; overflow: hidden; border: 1px solid #C0C0C0; margin-top: 10px; }
         .direccion-texto { font-size: 13px; color: #C0C0C0; margin-top: 10px; text-align: center; line-height: 1.4; }
-        .info-reserva ul { list-style: none; padding: 0; margin: 15px 0; font-size: 14px; color: #C0C0C0; }
+        .info-reserva ul { list-style: none; padding: 0; margin: 10px 0; font-size: 14px; color: #C0C0C0; }
         .info-reserva li { margin-bottom: 8px; position: relative; padding-left: 20px; }
         .info-reserva li::before { content: "•"; color: #ff4d4d; position: absolute; left: 0; font-weight: bold; }
         .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
@@ -47,7 +47,7 @@
             <div class="tarjeta">
                 <h3 style="text-align:center; color:#C0C0C0; margin:0;">UBICACIÓN</h3>
                 <div class="mapa-recuadro">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3271.742880155208!2d-67.6896282!3d-34.9129188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9679133333333333%3A0x7d6b38c6b7b7b7b7!2sPeluquer%C3%ADa%20y%20est%C3%A9tica%20Cybele!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar" 
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3278.4357560868846!2d-67.6896262!3d-34.7446549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967907f0f6c2680f%3A0xe679218df9c8c935!2sPeluquer%C3%ADa%20y%20est%C3%A9tica%20Cybele!5e0!3m2!1ses!2sar!4v1710000000000!5m2!1ses!2sar" 
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
                 <div class="direccion-texto">
@@ -84,6 +84,7 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
                 locale: 'es',
+                timeZone: 'UTC', 
                 allDaySlot: false,
                 slotMinTime: '08:00:00',
                 slotMaxTime: '21:00:00',
@@ -94,13 +95,12 @@
                 headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
                 
                 events: function(info, successCallback, failureCallback) {
-                    var url = 'https://script.google.com/macros/s/AKfycbzVrZguTyQBxNpVPuwVuT9azeo6-2LV1pqbr8ntZX2vfAAfQy_HyFig9HTODPubraSn/exec';
+                    var url = 'https://script.google.com/macros/s/AKfycbxbW2q9y85eGpJKXNECda9r_bdJDg6Er1Pk9Ic7CXhqaKT7-v3CBnaOyVTDzaok0skH/exec';
                     fetch(url + '?t=' + new Date().getTime())
                         .then(response => response.json())
                         .then(data => {
                             const eventosProcesados = data.map(event => {
-                                // CORRECCIÓN CLAVE: Cortamos el texto para que solo use AAAA-MM-DDTHH:MM
-                                // Esto elimina los segundos y minutos basura (como ese :16)
+                                // Limpiamos cualquier residuo de segundos o desfases
                                 let startLimpio = event.start.substring(0, 16);
                                 return {
                                     title: event.title,
@@ -115,7 +115,7 @@
 
                 select: function(info) {
                     datosTurno.fecha = info.startStr.split("T")[0];
-                    datosTurno.hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false});
+                    datosTurno.hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC'});
                     document.getElementById('txtFecha').innerText = "Turno para el " + datosTurno.fecha + " a las " + datosTurno.hora;
                     document.getElementById('miModal').style.display = "flex";
                 }
