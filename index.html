@@ -2,52 +2,99 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UwU Salon - Turnos</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; }
-        #calendar-container { max-width: 900px; margin: 20px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fce4ec; /* Rosa suave aesthetic */
+            margin: 0;
+            padding: 20px;
+        }
+        #calendar-container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        h2 { 
+            text-align: center; 
+            color: #f06292; 
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        /* Estilo para que el calendario se vea más limpio */
+        .fc { --fc-border-color: #f8bbd0; --fc-button-bg-color: #f06292; --fc-button-border-color: #f06292; }
+        .fc-event { cursor: not-allowed; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div id="calendar-container">
-        <h2 style="text-align: center; color: #f06292;">🌸 Reserva tu Turno 🌸</h2>
-        <div id="calendar"></div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridDay',
-                locale: 'es',
-                slotMinTime: '08:00:00',
-                slotMaxTime: '20:00:00',
-                allDaySlot: false,
-                selectable: true,
-                
-                // REEMPLAZÁ ESTO CON TU LINK DE APPS SCRIPT (EL QUE TERMINA EN /exec)
-                events: 'TU_LINK_DE_EXEC_AQUI', 
-                
-                businessHours: [
-                    { daysOfWeek: [1,2,3,4,5], startTime: '08:00', endTime: '12:00' },
-                    { daysOfWeek: [1,2,3,4,5], startTime: '14:00', endTime: '20:00' },
-                    { daysOfWeek: [6], startTime: '09:00', endTime: '12:00' },
-                    { daysOfWeek: [6], startTime: '14:00', endTime: '20:00' }
-                ],
-                selectConstraint: 'businessHours',
+<div id="calendar-container">
+    <h2>🌸 UwU Salon - Agenda tu Turno 🌸</h2>
+    <div id="calendar"></div>
+</div>
 
-                select: function(info) {
-                    let fecha = info.startStr.split("T")[0];
-                    let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    if(confirm("¿Reservar para el " + fecha + " a las " + hora + "?\n\nRecordá pagar la seña al Alias para confirmar.")) {
-                        // Cambiá TUNUMERO por tu número real de WhatsApp
-                        window.open("https://wa.me/TUNUMERO?text=Hola! Quiero reservar el turno del " + fecha + " a las " + hora);
-                    }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridDay', // Vista por día para ver bien las horas
+            locale: 'es',
+            allDaySlot: false,
+            slotMinTime: '08:00:00', // Empezamos a las 8am
+            slotMaxTime: '20:00:00', // Terminamos a las 8pm
+            slotDuration: '00:30:00', // Franjas de 30 minutos
+            selectable: true,
+            
+            // CONEXIÓN CON TU EXCEL
+            events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec', 
+            
+            // CONFIGURACIÓN DE TUS HORARIOS
+            businessHours: [
+                { // Lunes a Viernes: Mañana (Cafetería + Cortes)
+                    daysOfWeek: [ 1, 2, 3, 4, 5 ],
+                    startTime: '08:00',
+                    endTime: '12:00'
+                },
+                { // Lunes a Viernes: Tarde
+                    daysOfWeek: [ 1, 2, 3, 4, 5 ],
+                    startTime: '14:00',
+                    endTime: '20:00'
+                },
+                { // Sábados: Mañana
+                    daysOfWeek: [ 6 ],
+                    startTime: '09:00',
+                    endTime: '12:00'
+                },
+                { // Sábados: Tarde
+                    daysOfWeek: [ 6 ],
+                    startTime: '14:00',
+                    endTime: '20:00'
                 }
-            });
-            calendar.render();
+            ],
+            
+            // No permite elegir fuera de los horarios de arriba
+            selectConstraint: 'businessHours',
+
+            select: function(info) {
+                let fecha = info.startStr.split("T")[0];
+                let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Pop-up de confirmación
+                if(confirm("¿Querés reservar para el día " + fecha + " a las " + hora + "?\n\nPara confirmar el turno deberás pagar la seña al Alias correspondiente.")) {
+                    // Aquí podés cambiar TUNUMERO por tu número real de WhatsApp
+                    window.open("https://wa.me/TUNUMERO?text=Hola! Quiero confirmar mi turno del día " + fecha + " a las " + hora);
+                }
+                calendar.unselect();
+            }
         });
-    </script>
+        calendar.render();
+    });
+</script>
+
 </body>
 </html>
