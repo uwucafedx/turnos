@@ -1,0 +1,52 @@
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridDay',
+        allDaySlot: false,
+        locale: 'es',
+        selectable: true,
+        slotDuration: '00:30:00', // Turnos cada 30 min (podés cambiarlo a 01:00:00)
+        
+        // Configuramos el rango visual máximo (de 8am a 8pm)
+        slotMinTime: '08:00:00',
+        slotMaxTime: '20:00:00',
+
+        // Definimos las franjas donde SÍ se puede atender
+        businessHours: [
+            {
+                // Lunes a Viernes: Mañana (Cafetería + Corte)
+                daysOfWeek: [ 1, 2, 3, 4, 5 ],
+                startTime: '08:00',
+                endTime: '12:00'
+            },
+            {
+                // Lunes a Viernes: Tarde (Normal)
+                daysOfWeek: [ 1, 2, 3, 4, 5 ],
+                startTime: '14:00',
+                endTime: '20:00'
+            },
+            {
+                // Sábados: Mañana
+                daysOfWeek: [ 6 ],
+                startTime: '09:00',
+                endTime: '12:00'
+            },
+            {
+                // Sábados: Tarde
+                daysOfWeek: [ 6 ],
+                startTime: '14:00',
+                endTime: '20:00'
+            }
+        ],
+
+        // Evita que seleccionen fuera de los businessHours
+        selectConstraint: 'businessHours',
+
+        select: function(info) {
+            // Solo permite abrir el modal si es una hora permitida
+            document.getElementById('horaSeleccionada').innerText = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('pagoModal').style.display = 'block';
+        }
+    });
+    calendar.render();
+});
