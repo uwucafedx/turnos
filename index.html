@@ -3,98 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UwU Salon - Turnos</title>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <title>Reserva de Turnos</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #fce4ec; /* Rosa suave aesthetic */
+        /* Estilos de Fondo y Cuerpo */
+        body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('fondo.png'); /* Tu archivo de fondo */
+            background-attachment: fixed;
+            background-size: auto;
+            background-repeat: repeat;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #calendar-container { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 20px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+
+        /* Contenedor de Logos */
+        .logo-header {
+            width: 100%;
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.4); /* Sombra suave para que el logo resalte */
         }
-        h2 { 
-            text-align: center; 
-            color: #f06292; 
-            font-weight: 300;
-            margin-bottom: 20px;
+
+        .logo-mid {
+            text-align: center;
+            margin: 60px 0;
         }
-        /* Estilo para que el calendario se vea más limpio */
-        .fc { --fc-border-color: #f8bbd0; --fc-button-bg-color: #f06292; --fc-button-border-color: #f06292; }
-        .fc-event { cursor: not-allowed; opacity: 0.7; }
+
+        img {
+            max-width: 350px; /* Ajusta el tamaño de tus logos aquí */
+            height: auto;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+        }
+
+        /* Tarjeta de Contenido / Reservas */
+        .main-container {
+            background-color: rgba(43, 43, 43, 0.95); /* Gris oscuro semi-transparente */
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #C0C0C0; /* Borde plateado */
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #C0C0C0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-reserva {
+            background-color: #f2f2f2;
+            color: #333;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-reserva:hover {
+            background-color: #C0C0C0;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
 
-<div id="calendar-container">
-    <h2>🌸 UwU Salon - Agenda tu Turno 🌸</h2>
-    <div id="calendar"></div>
-</div>
+    <header class="logo-header">
+        <img src="logos.png" alt="Logo Superior">
+    </header>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridDay', // Vista por día para ver bien las horas
-            locale: 'es',
-            allDaySlot: false,
-            slotMinTime: '08:00:00', // Empezamos a las 8am
-            slotMaxTime: '20:00:00', // Terminamos a las 8pm
-            slotDuration: '00:30:00', // Franjas de 30 minutos
-            selectable: true,
-            
-            // CONEXIÓN CON TU EXCEL
-            events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec', 
-            
-            // CONFIGURACIÓN DE TUS HORARIOS
-            businessHours: [
-                { // Lunes a Viernes: Mañana (Cafetería + Cortes)
-                    daysOfWeek: [ 1, 2, 3, 4, 5 ],
-                    startTime: '08:00',
-                    endTime: '12:00'
-                },
-                { // Lunes a Viernes: Tarde
-                    daysOfWeek: [ 1, 2, 3, 4, 5 ],
-                    startTime: '14:00',
-                    endTime: '20:00'
-                },
-                { // Sábados: Mañana
-                    daysOfWeek: [ 6 ],
-                    startTime: '09:00',
-                    endTime: '12:00'
-                },
-                { // Sábados: Tarde
-                    daysOfWeek: [ 6 ],
-                    startTime: '14:00',
-                    endTime: '20:00'
-                }
-            ],
-            
-            // No permite elegir fuera de los horarios de arriba
-            selectConstraint: 'businessHours',
+    <main class="main-container">
+        <h1>Reserva tu Turno</h1>
+        <p>Selecciona el servicio de barbería o estética para agendar tu cita.</p>
+        
+        <div id="booking-system">
+            <a href="#" class="btn-reserva">VER DISPONIBILIDAD</a>
+        </div>
+    </main>
 
-            select: function(info) {
-                let fecha = info.startStr.split("T")[0];
-                let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                
-                // Pop-up de confirmación
-                if(confirm("¿Querés reservar para el día " + fecha + " a las " + hora + "?\n\nPara confirmar el turno deberás pagar la seña al Alias correspondiente.")) {
-                    // Aquí podés cambiar TUNUMERO por tu número real de WhatsApp
-                    window.open("https://wa.me/5492625464538?text=Hola! Quiero confirmar mi turno del día " + fecha + " a las " + hora);
-                }
-                calendar.unselect();
-            }
-        });
-        calendar.render();
-    });
-</script>
+    <section class="logo-mid">
+        <img src="logos.png" alt="Logo Inferior" style="max-width: 250px;">
+    </section>
+
+    <footer style="margin-bottom: 20px; font-size: 0.8em; opacity: 0.7;">
+        © 2026 - Gestión de Turnos Profesional
+    </footer>
 
 </body>
 </html>
