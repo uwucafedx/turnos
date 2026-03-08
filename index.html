@@ -14,25 +14,15 @@
             background-size: auto;
             background-repeat: repeat;
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        .logo-header {
-            width: 100%; text-align: center;
-            padding: 50px 0;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .logo-header img {
-            max-width: 550px; width: 90%; height: auto;
-            filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6));
-        }
+        .logo-header { width: 100%; text-align: center; padding: 50px 0; background: rgba(0, 0, 0, 0.5); }
+        .logo-header img { max-width: 550px; width: 90%; height: auto; filter: drop-shadow(0px 4px 12px rgba(0,0,0,0.6)); }
 
         #calendar-container {
             background-color: rgba(43, 43, 43, 0.95);
-            width: 95%; max-width: 1000px; /* Un poco más ancho para la vista semanal */
+            width: 95%; max-width: 1000px;
             padding: 20px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid #C0C0C0;
@@ -40,33 +30,28 @@
         }
 
         h2 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; }
-
         #calendar { background: white; padding: 15px; border-radius: 10px; color: #333; }
 
-        /* Estilos de Turnos y Horarios */
-        .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
-        .fc-event { background-color: #ff4d4d !important; border: none !important; color: white !important; font-weight: bold; text-align: center; }
-        .fc-nonbusiness { background-color: rgba(200, 200, 200, 0.3) !important; display: flex; justify-content: center; align-items: center; }
-        .fc-nonbusiness::after { content: "CERRADO"; color: #888; font-size: 10px; font-weight: bold; }
+        /* --- ESTILOS DE ESTADOS --- */
+        
+        /* Turnos Ocupados (Rojo con texto blanco) */
+        .fc-v-event { background-color: #ff4d4d !important; border: none !important; }
+        .texto-ocupado { color: white; font-weight: bold; font-size: 11px; text-align: center; width: 100%; }
+
+        /* Horarios Cerrados (Gris con texto) */
+        .fc-nonbusiness { 
+            background-color: rgba(180, 180, 180, 0.4) !important; 
+            display: flex !important; align-items: center !important; justify-content: center !important; 
+        }
+        .fc-nonbusiness::before { content: "CERRADO"; color: #666; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+
         .fc-day-sun { display: none !important; }
+        .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
 
-        /* Estilos del Menú Modal */
-        .modal {
-            display: none; position: fixed; z-index: 9999;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center;
-        }
-
-        .modal-content {
-            background-color: #2b2b2b; padding: 30px; border-radius: 20px;
-            border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px;
-        }
-
-        .btn-opcion {
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
-
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .modal-content { background-color: #2b2b2b; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
+        .btn-opcion { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-estetica { background-color: #e0e0e0; color: #333; }
         .btn-barberia { background-color: #333; color: #C0C0C0; border: 1px solid #C0C0C0; }
         .btn-cancelar { background: none; color: #ff5555; cursor: pointer; border: none; text-decoration: underline; margin-top: 15px; }
@@ -75,7 +60,7 @@
 <body>
 
     <header class="logo-header">
-        <img src="logos.png" alt="Cybele Mendoza y Raffá Barbería">
+        <img src="logos.png" alt="Cybele y Raffá">
     </header>
 
     <div id="calendar-container">
@@ -98,23 +83,26 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek', // CAMBIADO: Ahora inicia en vista SEMANAL
+                initialView: 'timeGridWeek',
                 locale: 'es',
                 allDaySlot: false,
                 slotMinTime: '08:00:00',
                 slotMaxTime: '20:00:00',
                 slotDuration: '00:30:00',
                 selectable: true,
-                hiddenDays: [0], // Oculta los domingos
+                hiddenDays: [0],
                 slotLabelFormat: { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' },
-                headerToolbar: { 
-                    left: 'prev,next today', 
-                    center: 'title', 
-                    right: 'timeGridWeek,timeGridDay' // Opciones de vista
-                },
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'timeGridWeek,timeGridDay' },
                 
                 events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec', 
                 
+                // Forzar que los eventos digan OCUPADO
+                eventContent: function(arg) {
+                    let div = document.createElement('div');
+                    div.innerHTML = '<div class="texto-ocupado">OCUPADO</div>';
+                    return { domNodes: [div] };
+                },
+
                 businessHours: [
                     { daysOfWeek: [ 1, 2, 3, 4, 5, 6 ], startTime: '08:00', endTime: '12:00' },
                     { daysOfWeek: [ 1, 2, 3, 4, 5, 6 ], startTime: '14:00', endTime: '20:00' }
@@ -125,15 +113,9 @@
                 select: function(info) {
                     datosReserva.fecha = info.startStr.split("T")[0];
                     datosReserva.hora = info.start.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit', hour12: true});
-                    
                     document.getElementById('fechaSeleccionada').innerText = "Turno: " + datosReserva.fecha + " a las " + datosReserva.hora;
                     document.getElementById('miModal').style.display = "flex";
                     calendar.unselect();
-                },
-
-                eventDataTransform: function(eventData) {
-                    eventData.title = "OCUPADO";
-                    return eventData;
                 }
             });
             calendar.render();
