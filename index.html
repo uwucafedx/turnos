@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Peluquería y Estética Cybele Mendoza & Raffá Barbería</title>
+    <title>Peluquería y Estética Cybele Mendoza & Raffá Barbería</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
         body {
@@ -59,9 +59,13 @@
             color: #333;
         }
 
+        /* Estilo para los botones del calendario */
         .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
         .fc-event { cursor: not-allowed; opacity: 0.7; }
         
+        /* Ocultar el domingo por CSS por seguridad visual */
+        .fc-day-sun { display: none !important; }
+
         .footer-logo {
             margin: 40px 0;
             text-align: center;
@@ -75,7 +79,7 @@
     </header>
 
     <div id="calendar-container">
-        <h2> Agenda tu Turno </h2>
+        <h2> AGENDÁ TU TURNO </h2>
         <div id="calendar"></div>
     </div>
 
@@ -94,6 +98,21 @@
                 slotMaxTime: '20:00:00',
                 slotDuration: '00:30:00',
                 selectable: true,
+                hiddenDays: [0], // 0 es Domingo, lo quitamos por completo
+                
+                // Formato de hora AM/PM
+                slotLabelFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    omitZeroMinute: false,
+                    meridiem: 'short'
+                },
+                eventTimeFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: 'short'
+                },
+
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -113,11 +132,17 @@
 
                 select: function(info) {
                     let fecha = info.startStr.split("T")[0];
-                    let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    let hora = info.start.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit', hour12: true});
                     
-                    if(confirm("¿Querés reservar para el día " + fecha + " a las " + hora + "?\n\nPresioná aceptar para enviar el pedido por WhatsApp.")) {
-                        // Número de Barbería/Estética configurado
-                        window.open("https://wa.me/5492625464538?text=Hola! Quiero reservar un turno de Barbería/Estética para el día " + fecha + " a las " + hora);
+                    // Cuadro de elección personalizado
+                    let eleccion = confirm("Seleccionaste el día " + fecha + " a las " + hora + ".\n\n¿Es para Peluquería/Estética?\n(Presiona ACEPTAR para Estética o CANCELAR para Barbería)");
+                    
+                    if(eleccion) {
+                        // Número Estética Cybele
+                        window.open("https://wa.me/5492625464538?text=Hola! Quiero reservar un turno de ESTÉTICA/PELUQUERÍA para el día " + fecha + " a las " + hora);
+                    } else {
+                        // Número Barbería Raffá
+                        window.open("https://wa.me/5492625451485?text=Hola! Quiero reservar un turno de BARBERÍA para el día " + fecha + " a las " + hora);
                     }
                     calendar.unselect();
                 }
