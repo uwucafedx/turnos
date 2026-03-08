@@ -24,11 +24,17 @@
         .info-reserva ul { list-style: none; padding: 0; margin: 10px 0; font-size: 14px; color: #C0C0C0; }
         .info-reserva li { margin-bottom: 8px; position: relative; padding-left: 20px; }
         .info-reserva li::before { content: "•"; color: #ff4d4d; position: absolute; left: 0; font-weight: bold; }
+        
+        /* Modal */
         .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: #222; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; }
+        
+        /* Botones */
+        .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; text-decoration: none; text-align: center; }
         .btn-cybele { background: #fdfdfd; color: #333; }
         .btn-raffa { background: #333; color: #C0C0C0; border: 1px solid #C0C0C0; }
+        .btn-cafe { background: #D4AF37; color: black; }
+        .btn-cafe:hover { background: #b8952e; }
     </style>
 </head>
 <body>
@@ -62,6 +68,18 @@
                     <li>Hacé clic sobre el horario que quieras.</li>
                     <li>Elegí el servicio y confirmá por WhatsApp.</li>
                 </ul>
+            </div>
+
+            <div class="tarjeta" style="text-align: center;">
+                <h3 style="color:#C0C0C0; margin:0;">☕ NUESTRO CAFÉ</h3>
+                <p style="font-size: 14px; color: #C0C0C0; margin: 15px 0;">
+                    Vení a disfrutar de nuestros cafés.<br>
+                    <b>Abierto:</b> Lunes a viernes<br>
+                    9:00 a 12:00 hs.
+                </p>
+                <a href="https://bodaazabache.my.canva.site/cafeteriacybelemendoza" target="_blank" class="btn btn-cafe">
+                    VER MENÚ COMPLETO
+                </a>
             </div>
         </div>
     </div>
@@ -99,7 +117,6 @@
                         .then(response => response.json())
                         .then(data => {
                             const eventosProcesados = data.map(event => {
-                                // Limpiamos cualquier residuo de segundos o desfases
                                 let startLimpio = event.start.substring(0, 16);
                                 return {
                                     title: event.title,
