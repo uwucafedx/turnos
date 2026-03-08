@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva de Turnos</title>
+    <title> Cybele Mendoza & Raffá Barbería</title>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-        /* Estilos de Fondo y Cuerpo */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('fondo.png'); /* Tu archivo de fondo */
+            background-image: url('fondo.png');
             background-attachment: fixed;
             background-size: auto;
             background-repeat: repeat;
@@ -20,61 +20,51 @@
             align-items: center;
         }
 
-        /* Contenedor de Logos */
         .logo-header {
             width: 100%;
             text-align: center;
-            padding: 40px 0;
-            background: rgba(0, 0, 0, 0.4); /* Sombra suave para que el logo resalte */
-        }
-
-        .logo-mid {
-            text-align: center;
-            margin: 60px 0;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.5);
         }
 
         img {
-            max-width: 350px; /* Ajusta el tamaño de tus logos aquí */
+            max-width: 320px;
             height: auto;
             filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
         }
 
-        /* Tarjeta de Contenido / Reservas */
-        .main-container {
-            background-color: rgba(43, 43, 43, 0.95); /* Gris oscuro semi-transparente */
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
-            border-radius: 15px;
+        #calendar-container {
+            background-color: rgba(43, 43, 43, 0.95);
+            width: 95%;
+            max-width: 900px;
+            padding: 20px;
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #C0C0C0; /* Borde plateado */
-            text-align: center;
-            margin-bottom: 40px;
+            border: 1px solid #C0C0C0;
+            margin: 20px 0;
         }
 
-        h1 {
+        h2 {
+            text-align: center;
             color: #C0C0C0;
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-weight: 400;
         }
 
-        .btn-reserva {
-            background-color: #f2f2f2;
+        #calendar {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
             color: #333;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-            transition: 0.3s;
         }
 
-        .btn-reserva:hover {
-            background-color: #C0C0C0;
-            transform: scale(1.05);
+        .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
+        .fc-event { cursor: not-allowed; opacity: 0.7; }
+        
+        .footer-logo {
+            margin: 40px 0;
+            text-align: center;
         }
     </style>
 </head>
@@ -84,22 +74,57 @@
         <img src="logos.png" alt="Logo Superior">
     </header>
 
-    <main class="main-container">
-        <h1>Reserva tu Turno</h1>
-        <p>Selecciona el servicio de barbería o estética para agendar tu cita.</p>
-        
-        <div id="booking-system">
-            <a href="#" class="btn-reserva">VER DISPONIBILIDAD</a>
-        </div>
-    </main>
+    <div id="calendar-container">
+        <h2> Agenda tu Turno </h2>
+        <div id="calendar"></div>
+    </div>
 
-    <section class="logo-mid">
-        <img src="logos.png" alt="Logo Inferior" style="max-width: 250px;">
-    </section>
+    <div class="footer-logo">
+        <img src="logos.png" alt="Logo Inferior" style="max-width: 200px;">
+    </div>
 
-    <footer style="margin-bottom: 20px; font-size: 0.8em; opacity: 0.7;">
-        © 2026 - Gestión de Turnos Profesional
-    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridDay',
+                locale: 'es',
+                allDaySlot: false,
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                slotDuration: '00:30:00',
+                selectable: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'timeGridDay,timeGridWeek'
+                },
+                
+                events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec', 
+                
+                businessHours: [
+                    { daysOfWeek: [ 1, 2, 3, 4, 5 ], startTime: '08:00', endTime: '12:00' },
+                    { daysOfWeek: [ 1, 2, 3, 4, 5 ], startTime: '14:00', endTime: '20:00' },
+                    { daysOfWeek: [ 6 ], startTime: '09:00', endTime: '12:00' },
+                    { daysOfWeek: [ 6 ], startTime: '14:00', endTime: '20:00' }
+                ],
+                
+                selectConstraint: 'businessHours',
+
+                select: function(info) {
+                    let fecha = info.startStr.split("T")[0];
+                    let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    if(confirm("¿Querés reservar para el día " + fecha + " a las " + hora + "?\n\nPresioná aceptar para enviar el pedido por WhatsApp.")) {
+                        // Número de Barbería/Estética configurado
+                        window.open("https://wa.me/5492625464538?text=Hola! Quiero reservar un turno de Barbería/Estética para el día " + fecha + " a las " + hora);
+                    }
+                    calendar.unselect();
+                }
+            });
+            calendar.render();
+        });
+    </script>
 
 </body>
 </html>
