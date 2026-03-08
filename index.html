@@ -1,52 +1,53 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridDay',
-        allDaySlot: false,
-        locale: 'es',
-        selectable: true,
-        slotDuration: '00:30:00', // Turnos cada 30 min (podés cambiarlo a 01:00:00)
-        
-        // Configuramos el rango visual máximo (de 8am a 8pm)
-        slotMinTime: '08:00:00',
-        slotMaxTime: '20:00:00',
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>UwU Salon - Turnos</title>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; }
+        #calendar-container { max-width: 900px; margin: 20px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div id="calendar-container">
+        <h2 style="text-align: center; color: #f06292;">🌸 Reserva tu Turno 🌸</h2>
+        <div id="calendar"></div>
+    </div>
 
-        // Definimos las franjas donde SÍ se puede atender
-        businessHours: [
-            {
-                // Lunes a Viernes: Mañana (Cafetería + Corte)
-                daysOfWeek: [ 1, 2, 3, 4, 5 ],
-                startTime: '08:00',
-                endTime: '12:00'
-            },
-            {
-                // Lunes a Viernes: Tarde (Normal)
-                daysOfWeek: [ 1, 2, 3, 4, 5 ],
-                startTime: '14:00',
-                endTime: '20:00'
-            },
-            {
-                // Sábados: Mañana
-                daysOfWeek: [ 6 ],
-                startTime: '09:00',
-                endTime: '12:00'
-            },
-            {
-                // Sábados: Tarde
-                daysOfWeek: [ 6 ],
-                startTime: '14:00',
-                endTime: '20:00'
-            }
-        ],
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridDay',
+                locale: 'es',
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                allDaySlot: false,
+                selectable: true,
+                
+                // REEMPLAZÁ ESTO CON TU LINK DE APPS SCRIPT (EL QUE TERMINA EN /exec)
+                events: 'TU_LINK_DE_EXEC_AQUI', 
+                
+                businessHours: [
+                    { daysOfWeek: [1,2,3,4,5], startTime: '08:00', endTime: '12:00' },
+                    { daysOfWeek: [1,2,3,4,5], startTime: '14:00', endTime: '20:00' },
+                    { daysOfWeek: [6], startTime: '09:00', endTime: '12:00' },
+                    { daysOfWeek: [6], startTime: '14:00', endTime: '20:00' }
+                ],
+                selectConstraint: 'businessHours',
 
-        // Evita que seleccionen fuera de los businessHours
-        selectConstraint: 'businessHours',
-
-        select: function(info) {
-            // Solo permite abrir el modal si es una hora permitida
-            document.getElementById('horaSeleccionada').innerText = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('pagoModal').style.display = 'block';
-        }
-    });
-    calendar.render();
-});
+                select: function(info) {
+                    let fecha = info.startStr.split("T")[0];
+                    let hora = info.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    if(confirm("¿Reservar para el " + fecha + " a las " + hora + "?\n\nRecordá pagar la seña al Alias para confirmar.")) {
+                        // Cambiá TUNUMERO por tu número real de WhatsApp
+                        window.open("https://wa.me/TUNUMERO?text=Hola! Quiero reservar el turno del " + fecha + " a las " + hora);
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
