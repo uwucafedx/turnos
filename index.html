@@ -6,15 +6,35 @@
     <title>Turnos - Cybele & Raffá</title>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; }
-        .logo-header { width: 100%; text-align: center; padding: 30px 0; background: rgba(0,0,0,0.8); border-bottom: 2px solid #C0C0C0; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* CONFIGURACIÓN DEL FONDO */
+            background-image: url('fondo.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: #1a1a1a; /* Backup por si no carga la imagen */
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .logo-header { width: 100%; text-align: center; padding: 30px 0; background: rgba(0,0,0,0.85); border-bottom: 2px solid #C0C0C0; }
         .logo-header img { max-width: 400px; width: 80%; }
         .contenedor { display: flex; flex-wrap: wrap; gap: 20px; width: 95%; max-width: 1200px; margin: 20px auto; padding-bottom: 50px; }
-        #columna-agenda { flex: 2; min-width: 350px; background: #2b2b2b; padding: 20px; border-radius: 15px; border: 1px solid #C0C0C0; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        
+        /* CUADROS CON TRANSPARENCIA PARA QUE SE VEA EL FONDO */
+        #columna-agenda { flex: 2; min-width: 350px; background: rgba(30, 30, 30, 0.9); padding: 20px; border-radius: 15px; border: 1px solid #C0C0C0; box-shadow: 0 4px 15px rgba(0,0,0,0.7); }
         #columna-derecha { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
-        .tarjeta { background: #2b2b2b; padding: 20px; border-radius: 15px; border: 1px solid #C0C0C0; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        #calendar { background: white; padding: 10px; border-radius: 10px; color: #333; height: 700px; }
+        .tarjeta { background: rgba(30, 30, 30, 0.9); padding: 20px; border-radius: 15px; border: 1px solid #C0C0C0; box-shadow: 0 4px 15px rgba(0,0,0,0.7); }
+        
+        #calendar { background: white; padding: 10px; border-radius: 10px; color: #333; height: 750px; }
         .mapa-recuadro { width: 100%; height: 350px; border-radius: 10px; overflow: hidden; border: 1px solid #C0C0C0; margin-top: 15px; }
+        
+        /* MODAL */
         .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: #222; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
         .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; }
@@ -31,7 +51,7 @@
 
     <div class="contenedor">
         <div id="columna-agenda">
-            <h2 style="text-align:center; color:#C0C0C0; margin-top:0;">RESERVÁ TU TURNO</h2>
+            <h2 style="text-align:center; color:#C0C0C0; margin-top:0; text-shadow: 2px 2px 4px black;">RESERVÁ TU TURNO</h2>
             <div id="calendar"></div>
         </div>
 
@@ -40,8 +60,8 @@
                 <h3 style="text-align:center; color:#C0C0C0; margin:0;">UBICACIÓN</h3>
                 <div class="mapa-recuadro">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.1234!2d-67.6834!3d-34.9834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDU5JzAwLjAiUyA2N8KwNDEnMDAuMCJX!5e0!3m2!1ses!2sar!4v1700000000000" 
-                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3236.467439167905!2d-67.689626424207!3d-34.9323285728373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96061118185970b1%3A0xf4f5ee3c7ccbb09b!2sPeluqueria%20y%20est%C3%A9tica%20Cybele%20Mendoza!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
                 <p style="text-align: center; font-size: 14px; margin-top: 15px; color:#C0C0C0; line-height: 1.4;">
@@ -53,9 +73,9 @@
             <div class="tarjeta">
                 <h4 style="text-align:center; color:#C0C0C0; margin:0;">INFO DE RESERVA</h4>
                 <ul style="font-size: 13px; color: #ccc; padding-left: 20px; line-height: 1.6;">
-                    <li>Buscá un espacio en blanco.</li>
-                    <li>Hacé clic para elegir Peluquería o Barbería.</li>
-                    <li>Se abrirá WhatsApp para confirmar.</li>
+                    <li>Buscá un horario vacío.</li>
+                    <li>Seleccioná el servicio deseado.</li>
+                    <li>Confirmá los datos por WhatsApp.</li>
                 </ul>
             </div>
         </div>
