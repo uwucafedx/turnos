@@ -26,56 +26,38 @@
             padding: 20px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid #C0C0C0;
-            margin: 20px 0 60px 0;
+            margin: 20px 0 40px 0;
         }
 
         h2 { text-align: center; color: #C0C0C0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
         #calendar { background: white; padding: 15px; border-radius: 10px; color: #333; }
 
-        /* --- ESTILOS DE BLOQUEO (LO QUE NECESITÁS) --- */
-        
-        /* Turnos del Excel (Rojo Fuerte) */
+        /* --- ESTILOS DE BLOQUEO --- */
         .fc-v-event { 
             background-color: #d32f2f !important; 
             border: none !important; 
-            opacity: 1 !important;
-        }
-
-        /* Forzar que el texto se vea y esté centrado */
-        .fc-event-main {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            height: 100% !important;
-            width: 100% !important;
+            display: flex !important; align-items: center !important; justify-content: center !important;
         }
 
         .texto-bloqueo {
-            color: white !important;
-            font-weight: 800 !important;
-            font-size: 11px !important;
-            text-align: center;
-            text-transform: uppercase;
-            width: 100%;
+            color: white !important; font-weight: 800 !important; font-size: 11px !important;
+            text-align: center; text-transform: uppercase; width: 100%;
         }
 
-        /* Horario Cerrado (Gris) */
         .fc-nonbusiness { 
             background-color: rgba(180, 180, 180, 0.5) !important; 
-            display: flex !important; 
-            align-items: center !important; 
-            justify-content: center !important; 
+            display: flex !important; align-items: center !important; justify-content: center !important; 
         }
         
         .fc-nonbusiness::after { 
-            content: "CERRADO"; 
-            color: #444; 
-            font-size: 11px; 
-            font-weight: bold; 
+            content: "CERRADO"; color: #444; font-size: 10px; font-weight: bold; 
         }
 
         .fc-day-sun { display: none !important; }
         .fc { --fc-button-bg-color: #333; --fc-button-border-color: #C0C0C0; }
+
+        /* --- SECCIÓN MAPA --- */
+        .mapa-container { width: 100%; height: 350px; border-radius: 15px; overflow: hidden; border: 1px solid #C0C0C0; margin-top: 10px; }
 
         /* Modal */
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
@@ -97,11 +79,19 @@
         <div id="calendar"></div>
     </div>
 
+    <div id="calendar-container">
+        <h2> NUESTRA UBICACIÓN </h2>
+        <div class="mapa-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3351.0478648572115!2d-68.8354!3d-32.8552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDUxJzE4LjciUyA2OMKwNTAnMDcuNCJX!5e0!3m2!1ses!2sar!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <p style="text-align: center; color: #C0C0C0; margin-top: 15px; font-size: 14px;">📍 Las Heras, Mendoza, Argentina</p>
+    </div>
+
     <div id="miModal" class="modal">
         <div class="modal-content">
             <h3 id="fechaSeleccionada" style="color: #C0C0C0;">Elegí tu servicio</h3>
-            <button class="btn-opcion btn-estetica" onclick="enviarWhatsApp('estetica')">PELUQUERÍA Y ESTÉTICA (Cybele)</button>
-            <button class="btn-opcion btn-barberia" onclick="enviarWhatsApp('barberia')">BARBERÍA (Raffá)</button>
+            <button class="btn-opcion btn-estetica" onclick="enviarWhatsApp('estetica')">PELUQUERÍA Y ESTÉTICA Cybele</button>
+            <button class="btn-opcion btn-barberia" onclick="enviarWhatsApp('barberia')">BARBERÍA Raffá</button>
             <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
         </div>
     </div>
@@ -121,20 +111,22 @@
                 selectable: true,
                 hiddenDays: [0],
                 slotLabelFormat: { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' },
-                headerToolbar: { 
-                    left: 'prev,next today', 
-                    center: 'title', 
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay' 
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
+                
+                // --- NUEVO LINK CON FILTRO DE CACHÉ ---
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    fetch('https://script.google.com/macros/s/AKfycbwSzBoPxdYPQ6eiskuhra5upZ1W04cQ6rqIIVpDaVAR6P1VYJejkCOjXTdQbIBRBIzZ/exec?cache=' + new Date().getTime())
+                        .then(response => response.json())
+                        .then(data => {
+                            // Filtro: Solo muestra el bloque si tiene algo escrito en la columna Cliente
+                            let ocupados = data.filter(e => e.title && e.title !== "" && e.title !== "null");
+                            successCallback(ocupados);
+                        })
+                        .catch(error => failureCallback(error));
                 },
                 
-                // Conexión al Excel
-                events: 'https://script.google.com/macros/s/AKfycbwxsXF1J3OTCUpLs0378nFHCjArpQcatUsUj9ZlLTyqEdespDUDo3ct3DGeG3XUA2kW/exec',
-                
-                // ESTO FUERZA EL TEXTO "NO DISPONIBLE" ADENTRO DEL COLOR
                 eventContent: function(arg) {
-                    return { 
-                        html: '<div class="texto-bloqueo">NO DISPONIBLE</div>' 
-                    };
+                    return { html: '<div class="texto-bloqueo">NO DISPONIBLE</div>' };
                 },
 
                 businessHours: [
