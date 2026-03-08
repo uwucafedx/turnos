@@ -15,7 +15,6 @@
         .tarjeta { background: #2b2b2b; padding: 20px; border-radius: 15px; border: 1px solid #C0C0C0; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         #calendar { background: white; padding: 10px; border-radius: 10px; color: #333; height: 700px; }
         .mapa-recuadro { width: 100%; height: 350px; border-radius: 10px; overflow: hidden; border: 1px solid #C0C0C0; margin-top: 15px; }
-        /* Estilos del Modal */
         .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-content { background: #222; padding: 30px; border-radius: 20px; border: 2px solid #C0C0C0; text-align: center; width: 90%; max-width: 400px; }
         .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; }
@@ -38,21 +37,25 @@
 
         <div id="columna-derecha">
             <div class="tarjeta">
-                <h3 style="text-align:center; color:#C0C0C0; margin:0;">NUESTRA UBICACIÓN</h3>
+                <h3 style="text-align:center; color:#C0C0C0; margin:0;">UBICACIÓN</h3>
                 <div class="mapa-recuadro">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3238.44123456789!2d-67.6894!3d-35.0000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDAwJzAwLjAiUyA2N8KwNDEnMjEuOCJX!5e0!3m2!1ses!2sar!4v1710000000000!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.1234!2d-67.6834!3d-34.9834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDU5JzAwLjAiUyA2N8KwNDEnMDAuMCJX!5e0!3m2!1ses!2sar!4v1700000000000" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                    </iframe>
                 </div>
                 <p style="text-align: center; font-size: 14px; margin-top: 15px; color:#C0C0C0; line-height: 1.4;">
-                    📍 Diagonal Carlos Pellegrini y Centenario,<br>Local 2, Alvear Oeste (M5620).
+                    📍 Diagonal Carlos Pellegrini, Centenario y local 2,<br>
+                    M5620 Colonia Alvear, Mendoza (Alvear Oeste).
                 </p>
             </div>
             
             <div class="tarjeta">
-                <h4 style="text-align:center; color:#C0C0C0; margin:0;">¿CÓMO RESERVAR?</h4>
-                <ul style="font-size: 13px; color: #ccc; padding-left: 20px;">
-                    <li>Elegí un horario disponible en blanco.</li>
-                    <li>Seleccioná el servicio (Peluquería o Barbería).</li>
-                    <li>Confirmá el mensaje por WhatsApp.</li>
+                <h4 style="text-align:center; color:#C0C0C0; margin:0;">INFO DE RESERVA</h4>
+                <ul style="font-size: 13px; color: #ccc; padding-left: 20px; line-height: 1.6;">
+                    <li>Buscá un espacio en blanco.</li>
+                    <li>Hacé clic para elegir Peluquería o Barbería.</li>
+                    <li>Se abrirá WhatsApp para confirmar.</li>
                 </ul>
             </div>
         </div>
@@ -60,10 +63,10 @@
 
     <div id="miModal" class="modal">
         <div class="modal-content">
-            <h3 id="txtFecha" style="color:#C0C0C0; margin-bottom: 20px;">Elegí el servicio</h3>
+            <h3 id="txtFecha" style="color:#C0C0C0; margin-bottom: 20px;">Servicio</h3>
             <button class="btn btn-cybele" onclick="enviarWhatsApp('Cybele')">PELUQUERÍA Cybele</button>
             <button class="btn btn-raffa" onclick="enviarWhatsApp('Raffá')">BARBERÍA Raffá</button>
-            <button onclick="document.getElementById('miModal').style.display='none'" style="background:none; color:#ff4d4d; border:none; cursor:pointer; margin-top:10px; font-weight:bold;">Cerrar</button>
+            <button onclick="document.getElementById('miModal').style.display='none'" style="background:none; color:#ff4d4d; border:none; cursor:pointer; margin-top:10px; font-weight:bold;">Cancelar</button>
         </div>
     </div>
 
@@ -79,12 +82,11 @@
                 slotMinTime: '08:00:00',
                 slotMaxTime: '21:00:00',
                 slotDuration: '00:30:00',
-                hiddenDays: [0], // Salta los domingos
+                hiddenDays: [0], 
                 selectable: true,
                 headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
                 
                 events: function(info, successCallback, failureCallback) {
-                    // LINK DE TU APPS SCRIPT
                     var url = 'https://script.google.com/macros/s/AKfycbz4mOlzI8bJtyFBj-7NGN_akyxmlDle3JwTQv0ieYGjnrYF-f72tWvJ9zlGqSeTaVQ/exec';
                     fetch(url + '?t=' + new Date().getTime())
                         .then(response => response.json())
